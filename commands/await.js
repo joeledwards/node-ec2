@@ -25,7 +25,8 @@ function builder (yargs) {
     .option('timeout', {
       type: 'number',
       desc: 'max time (in seconds) to await state transition',
-      default: 300
+      default: 300,
+      alias: 't'
     })
 }
 
