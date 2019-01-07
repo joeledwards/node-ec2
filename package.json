@@ -19,6 +19,7 @@
   "license": "ISC",
   "dependencies": {
     "@buzuli/color": "^2.0.0",
+    "@buzuli/scheduler": "^2.0.0",
     "aws-sdk": "^2.373.0",
     "durations": "^3.4.1",
     "yargs": "^12.0.5"

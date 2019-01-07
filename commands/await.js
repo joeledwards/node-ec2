@@ -22,20 +22,24 @@ function builder (yargs) {
       desc: 'prefix of the keys to list',
       choices: Object.keys(awaitStates)
     })
+    .option('timeout', {
+      type: 'number',
+      desc: 'max time (in seconds) to await state transition',
+      default: 300
+    })
 }
 
 async function handler (options) {
   const {
     instanceId,
-    state
+    state,
+    timeout
   } = options
 
   const c = require('@buzuli/color')
   const aws = require('aws-sdk')
+  const scheduler = require('@buzuli/scheduler')()
   const { stopwatch } = require('durations')
-
-  const watch = stopwatch().start()
-  const ec2 = new aws.EC2()
 
   const stateColor = state => {
     switch (state) {
@@ -46,8 +50,11 @@ async function handler (options) {
     }
   }
 
+  const watch = stopwatch().start()
+  const ec2 = new aws.EC2()
+
   async function instanceState () {
-    return new Promise ((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       const ec2Options = {
         InstanceIds: [instanceId]
       }
@@ -58,11 +65,25 @@ async function handler (options) {
     })
   }
 
-  try {
-    await instanceState()
-    console.info(`Instance ${c.yellow(instanceId)} is ${stateColor(state)} (${watch})`)
-  } catch (error) {
-    console.error(`Error awaiting state ${stateColor(state)} for EC2 instance ${c.yellow(instanceId)} (${watch})`)
+  scheduler.after(timeout * 1000, () => {
+    console.error(`Timeout awaiting state ${stateColor(state)} for EC2 instance ${c.yellow(instanceId)} (${watch})`)
     process.exit(1)
+  })
+
+  let done = false
+
+  while (!done && watch.duration().seconds() < timeout) {
+    try {
+      await instanceState()
+      console.info(`Instance ${c.yellow(instanceId)} is ${stateColor(state)} (${watch})`)
+      done = true
+    } catch (error) {
+      if (error.code !== 'ResourceNotReady') {
+        console.error(`Error awaiting state ${stateColor(state)} for EC2 instance ${c.yellow(instanceId)} (${watch}) : ${error}`)
+        done = true
+      }
+    }
   }
+
+  scheduler.pause()
 }
