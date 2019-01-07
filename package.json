@@ -1,0 +1,29 @@
+{
+  "name": "@buzuli/ec2",
+  "version": "1.0.0",
+  "description": "EC2 CLI client",
+  "repository": "github:joeledwards/node-ec2",
+  "bin": {
+    "ec2": "bin/ec2.js"
+  },
+  "scripts": {
+    "lint": "standard",
+    "lint:fix": "standard --fix"
+  },
+  "keywords": [
+    "ec2",
+    "aws",
+    "cli"
+  ],
+  "author": "Joel Edwards <joeledwards@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "@buzuli/color": "^2.0.0",
+    "aws-sdk": "^2.373.0",
+    "durations": "^3.4.1",
+    "yargs": "^12.0.5"
+  },
+  "devDependencies": {
+    "standard": "^12.0.1"
+  }
+}
