@@ -66,7 +66,7 @@ async function listIps ({
     } else {
       console.info(json ? buzJson(ips) : summarize(ips))
       console.info(c.green(
-        `Found ${c.orange(count)} elastic IPs for region ${c.yellow(ec2.aws.region)}`
+        `Found ${c.orange(count)} elastic IPs for region ${c.yellow(aws.sdk.config.region)}`
       ))
     }
   } catch (error) {

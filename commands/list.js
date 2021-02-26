@@ -287,7 +287,7 @@ async function listInstances ({
   }
 
   try {
-    const result = await promised(h => ec2.sdk.listInstances({}, h))
+    const result = await promised(h => ec2.sdk.describeInstances({}, h))
 
     const instances = r.compose(
       r.map(fieldExtractor),
@@ -303,13 +303,13 @@ async function listInstances ({
     } else {
       console.log(json ? buzJson(instances) : summarize(instances))
       console.log(
-        `Listed ${c.orange(count)} instances for region ${c.green(ec2.aws.region)}`
+        `Listed ${c.orange(count)} instances for region ${c.green(aws.sdk.config.region)}`
       )
     }
   } catch (error) {
     console.error(error)
     console.error(c.red(c.emoji.inject(
-      `Error finding instances in ${c.green(ec2.aws.region)}: details above :point_up:`
+      `Error finding instances in ${c.green(aws.sdk.config.region)}: details above :point_up:`
     )))
     process.exit(1)
   }
