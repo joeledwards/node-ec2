@@ -1,8 +1,10 @@
+const handler = require('../lib/handler')
+
 module.exports = {
   command: 'await <state> <instance-id>',
   desc: 'await a state for an EC2 instance',
   builder,
-  handler
+  handler: handler(awaitState)
 }
 
 const awaitStates = {
@@ -30,15 +32,16 @@ function builder (yargs) {
     })
 }
 
-async function handler (options) {
-  const {
+async function awaitState ({
+  aws,
+  options: {
     instanceId,
     state,
     timeout
-  } = options
-
+  }
+}) {
   const c = require('@buzuli/color')
-  const aws = require('aws-sdk')
+  const promised = require('@buzuli/promised')
   const scheduler = require('@buzuli/scheduler')()
   const { stopwatch } = require('durations')
 
@@ -52,18 +55,14 @@ async function handler (options) {
   }
 
   const watch = stopwatch().start()
-  const ec2 = new aws.EC2()
+  const ec2 = aws.ec2()
 
   async function instanceState () {
-    return new Promise((resolve, reject) => {
-      const ec2Options = {
-        InstanceIds: [instanceId]
-      }
+    const ec2Options = {
+      InstanceIds: [instanceId]
+    }
 
-      ec2.waitFor(awaitStates[state], ec2Options, (error, data) => {
-        error ? reject(error) : resolve(data)
-      })
-    })
+    promised(h => ec2.sdk.waitFor(awaitStates[state], ec2Options, h))
   }
 
   scheduler.after(timeout * 1000, () => {
