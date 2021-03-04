@@ -287,7 +287,21 @@ async function listInstances ({
   }
 
   try {
-    const result = await promised(h => ec2.sdk.describeInstances({}, h))
+    const describeOptions = {}
+
+    const filters = []
+
+    if (id) {
+      filters.push({ Name: 'instance-id', Values: [id] })
+      describeOptions.Filters = filters
+    }
+
+    if (state) {
+      filters.push({ Name: 'instance-state-name', Values: [state] })
+      describeOptions.Filters = filters
+    }
+
+    const result = await promised(h => ec2.sdk.describeInstances(describeOptions, h))
 
     const instances = r.compose(
       r.map(fieldExtractor),
