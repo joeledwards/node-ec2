@@ -26,7 +26,7 @@
   "license": "ISC",
   "dependencies": {
     "@buzuli/app": "^1.2.1",
-    "@buzuli/aws": "^4.3.2",
+    "@buzuli/aws": "^4.3.4",
     "@buzuli/color": "^2.3.1",
     "@buzuli/promised": "^1.0.0",
     "@buzuli/scheduler": "^2.0.0",
