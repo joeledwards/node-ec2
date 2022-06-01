@@ -26,16 +26,16 @@
   "license": "ISC",
   "dependencies": {
     "@buzuli/app": "^1.2.1",
-    "@buzuli/aws": "^4.3.4",
+    "@buzuli/aws": "^4.5.1",
     "@buzuli/color": "^2.3.1",
     "@buzuli/promised": "^1.0.0",
     "@buzuli/scheduler": "^2.0.0",
     "durations": "^3.4.2",
-    "moment": "^2.29.1",
+    "moment": "^2.29.3",
     "ramda": "^0.28.0",
-    "yargs": "^17.3.1"
+    "yargs": "^17.5.1"
   },
   "devDependencies": {
-    "standard": "^16.0.4"
+    "standard": "^17.0.0"
   }
 }
