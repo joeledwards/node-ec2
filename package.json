@@ -1,6 +1,6 @@
 {
   "name": "@buzuli/ec2",
-  "version": "2.1.2",
+  "version": "2.2.0",
   "description": "EC2 CLI client",
   "repository": "github:joeledwards/node-ec2",
   "bin": {
